@@ -1,0 +1,48 @@
+.headerContainer {
+    display: flex;
+    align-items: center;
+    background-color: #f3e1f4;
+    padding: 10px 20px;
+    justify-content: space-between;
+}
+
+.headerContainer img {
+    height: 50px;
+    border-radius: 25px;
+    margin-right: 20px; 
+}
+
+.containerOpcoes {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 15px; 
+}
+
+.headerContainer nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.headerContainer nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 450;
+}
+
+.headerContainer nav ul li a:hover {
+    color: #007bff;
+}
+
+.headerContainer button {
+    border: none;
+    border-radius: 8px;
+    color: white;
+    background-color: #69237C;
+    padding: 4px 32px;
+    font-weight: bold;
+    cursor: pointer;
+}
