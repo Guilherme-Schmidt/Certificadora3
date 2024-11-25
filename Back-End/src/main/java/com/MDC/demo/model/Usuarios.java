@@ -3,11 +3,7 @@ package com.MDC.demo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import org.hibernate.annotations.CollectionId;
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalDate;
-
 
 @Entity(name="usuarios")
 @Data
