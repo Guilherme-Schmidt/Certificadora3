@@ -1,13 +1,10 @@
 import './App.css';
-import  criarUsuarios from './pages/criarUsuarios';
-import Header from './components/Header';
-import Forms from './components/Forms';
+import CriarUsuarios from './pages/CriarUsuarios.jsx';
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Forms/>
+      <CriarUsuarios/>
     </div>
   );
 }
