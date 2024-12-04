@@ -1,11 +1,11 @@
 import Header from '../components/Header.jsx'
-import Forms from '../components/Forms.jsx'
+import FormsUser from '../components/FormsUser.jsx'
 
-function CriarUsuarios(){
-    return(
+function CriarUsuarios({ formData, setFormData }) {
+    return (
         <div>
-            <Header/>
-            <Forms/>
+            <Header />
+            <FormsUser formData={formData} setFormData={setFormData} />
         </div>
     );
 }

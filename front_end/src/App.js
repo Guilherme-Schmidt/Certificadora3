@@ -1,11 +1,32 @@
-import './App.css';
-import CriarUsuarios from './pages/CriarUsuarios.jsx';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./App.css";
 
-function App() {
+// Importar componentes
+import CriarUsuarios from "./pages/criarUsuarios.jsx";
+
+function App(){
+
+  // Estado para o formulário
+  const [form, setForm] = useState({
+    id: "",
+    nome: "",
+    funcao: "",
+    setor: "",
+    dataEntrada: "",
+    dataSaida: "",
+    permissao: "",
+    email: "",
+    senha: "",
+  });
+
   return (
-    <div className="App">
-      <CriarUsuarios/>
-    </div>
+    <Router>
+      <Routes>
+        {/* Rota para criar usuários */}
+        <Route path="/" element={<CriarUsuarios formData={form} setFormData={setForm}/>} />
+      </Routes>
+    </Router>
   );
 }
 
