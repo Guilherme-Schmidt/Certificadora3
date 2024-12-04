@@ -1,6 +1,6 @@
 package com.MDC.demo.controller;
 
-
+ 
 import com.MDC.demo.model.Atividades;
 import com.MDC.demo.service.AtividadeService;
 import org.springframework.beans.factory.annotation.Autowired;
