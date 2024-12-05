@@ -50,21 +50,19 @@ public class UsuarioController {
     @PostMapping("/auth/register")
     public ResponseEntity createUsuario(@RequestBody @Valid RegisterDto usuario) {
         if (this.usuarioRespository.findByEmail(usuario.email()) != null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("O email já está registrado.");
         }
 
-        // Verificar se a senha não é vazia
         if (usuario.senha() == null || usuario.senha().isEmpty()) {
             return ResponseEntity.badRequest().body("A senha não pode ser vazia");
         }
 
-        // Criptografar a senha
         String encryptedPassword = new BCryptPasswordEncoder().encode(usuario.senha());
         Usuarios newUsuario = new Usuarios(usuario.nome(), usuario.funcao(), usuario.setor(), usuario.dataEntrada(),
                 usuario.dataSaida(), usuario.permissao(), usuario.email(), encryptedPassword);
 
         this.usuarioRespository.save(newUsuario);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(newUsuario); // Retorna o novo usuário como resposta
     }
 
 

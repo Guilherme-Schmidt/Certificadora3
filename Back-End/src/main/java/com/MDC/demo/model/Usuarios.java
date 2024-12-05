@@ -49,7 +49,6 @@ public class Usuarios implements UserDetails {
 
     public Usuarios(String nome, String funcao, String setor, LocalDate dataEntrada,
                     LocalDate dataSaida, Permissao permissao, String email, String senha) {
-        this.id = id;
         this.nome = nome;
         this.funcao = funcao;
         this.setor = setor;
