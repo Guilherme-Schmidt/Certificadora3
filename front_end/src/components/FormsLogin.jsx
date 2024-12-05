@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios'
 import styles from './FormsUser.module.css';
 
-function FormsUser({ formData, setFormData }) {
+function Forms({ formData, setFormData }) {
     const [message, setMessage] = useState('');
-
-    const api = axios.create({
-        baseURL: '/usuarios', // Usa o proxy configurado no package.json
-    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,13 +17,13 @@ function FormsUser({ formData, setFormData }) {
             setMessage('Por favor, insira um email válido.');
             return;
         }
-        if (formData.senha.length < 6) {
-            setMessage('A senha precisa ter pelo menos 6 caracteres.');
-            return;
-        }
 
         try {
-            const response = await api.post('/auth/register',formData)
+            const response = await fetch('http://localhost:8080/usuarios/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
 
             // Checando se a resposta foi bem-sucedida
             if (response.ok) {
@@ -36,7 +31,6 @@ function FormsUser({ formData, setFormData }) {
                 setMessage('Usuário cadastrado com sucesso!');
                 setFormData({
                     nome: '',
-                    permissao: '',
                     funcao: '',
                     setor: '',
                     dataEntrada: '',
@@ -57,7 +51,7 @@ function FormsUser({ formData, setFormData }) {
     
     return (
         <div className={styles.formContainer}>
-            <h2>Cadastro de Usuários</h2>
+            <h2>Login</h2>
             {message && <p>{message}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="inputGroup">
@@ -73,12 +67,12 @@ function FormsUser({ formData, setFormData }) {
                 </div>
 
                 <div className="inputGroup">
-                    <label htmlFor="permissao">Tipo:</label>
+                    <label htmlFor="tipo">Nome:</label>
                     <input
                         type="text"
                         id="permissao"
                         name="permissao"
-                        value={formData.permissao}
+                        value={formData.nome}
                         onChange={handleChange}
                         required
                     />
@@ -90,65 +84,15 @@ function FormsUser({ formData, setFormData }) {
                         type="text"
                         id="funcao"
                         name="funcao"
-                        value={formData.funcao}
+                        value={formData.permissao}
                         onChange={handleChange}
                         required
                     />
                 </div>
-
-                <div className="inputGroup">
-                    <label htmlFor="setor">Setor:</label>
-                    <input
-                        type="text"
-                        id="setor"
-                        name="setor"
-                        value={formData.setor}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="inputGroup">
-                    <label htmlFor="dataEntrada">Data de Entrada:</label>
-                    <input
-                        type="date"
-                        id="dataEntrada"
-                        name="dataEntrada"
-                        placeholder="DD/MM/AAAA"
-                        value={formData.dataEntrada}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="inputGroup">
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="inputGroup">
-                    <label htmlFor="senha">Senha:</label>
-                    <input
-                        type="password"
-                        id="senha"
-                        name="senha"
-                        value={formData.senha}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <button type="submit">Cadastrar</button>
+                <button type="submit">Entrar</button>
             </form>
         </div>
     );
 }
 
-export default FormsUser;
+export default Forms;
