@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
+@Table (name="usuarios")
 @Entity(name="usuarios")
 @Data
 public class Usuarios implements UserDetails {
