@@ -5,10 +5,6 @@ import styles from './FormsUser.module.css';
 function FormsUser({ formData, setFormData }) {
     const [message, setMessage] = useState('');
 
-    const api = axios.create({
-        baseURL: '/usuarios', // Usa o proxy configurado no package.json
-    });
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -16,7 +12,7 @@ function FormsUser({ formData, setFormData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Evita o envio do formulário padrão
-        
+    
         // Validação simples no frontend (por exemplo, verificar formato do email)
         if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
             setMessage('Por favor, insira um email válido.');
@@ -26,34 +22,44 @@ function FormsUser({ formData, setFormData }) {
             setMessage('A senha precisa ter pelo menos 6 caracteres.');
             return;
         }
-
+        
+        if (formData.dataEntrada) {
+            const parts = formData.dataEntrada.split('-'); // Divide pelo "-"
+            if (parts.length === 3) {
+                const [year, day, month] = parts; // Extrai partes corretamente
+                formData.dataEntrada = `${year}-${month}-${day}`; // Reordena no formato esperado
+            } else {
+                console.error('Formato de data inválido. Certifique-se de usar AAAA/DD/MM.');
+            }
+        }
+    
+        const dataToSend = { ...formData };
+        delete dataToSend.id; // Remove o id (caso tenha) para enviar os dados corretos
+    
+        console.log("Dados enviados:", dataToSend); // Verifique os dados
+    
         try {
-            const response = await api.post('/auth/register',formData)
-
+            const response = await axios.post('http://localhost:8080/usuarios/auth/register', dataToSend, {
+                headers: {
+                    'Content-Type': 'application/json' // Garante que o backend entenda o formato JSON
+                }
+            });
+    
             // Checando se a resposta foi bem-sucedida
-            if (response.ok) {
-                const data = await response.json();
+            if (response.status === 200) {
                 setMessage('Usuário cadastrado com sucesso!');
-                setFormData({
-                    nome: '',
-                    permissao: '',
-                    funcao: '',
-                    setor: '',
-                    dataEntrada: '',
-                    email: '',
-                    senha: '',
-                });
+                // Se necessário, trate a resposta com sucesso aqui
             } else {
                 // Caso a resposta não seja ok, extraímos a mensagem de erro
-                const errorData = await response.json();
-                setMessage(errorData.message || 'Erro no cadastro. Verifique os dados!');
+                setMessage(response.data.message || 'Erro no cadastro. Verifique os dados!');
             }
         } catch (error) {
             // Em caso de erro na requisição ou rede, exibimos a mensagem de erro
             console.error('Erro ao fazer a requisição:', error);
-            setMessage(`Erro: ${error.stack || error.message}`);
+            setMessage(`Erro: ${error.response ? error.response.data : error.message}`);
         }
     };
+    
     
     return (
         <div className={styles.formContainer}>
@@ -114,7 +120,7 @@ function FormsUser({ formData, setFormData }) {
                         type="date"
                         id="dataEntrada"
                         name="dataEntrada"
-                        placeholder="DD/MM/AAAA"
+                        placeholder="YYYY-MM-DD"
                         value={formData.dataEntrada}
                         onChange={handleChange}
                         required

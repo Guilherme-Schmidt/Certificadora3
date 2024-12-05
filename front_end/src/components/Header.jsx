@@ -14,7 +14,9 @@ function Header() {
                     </ul>
                     
                 </nav>
-                <button>Entrar</button>
+                <a href="/login">
+                    <button>Entrar</button>
+                </a>
             </div>
         </header>
     );

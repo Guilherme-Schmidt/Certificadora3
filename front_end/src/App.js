@@ -4,11 +4,12 @@ import "./App.css";
 
 // Importar componentes
 import CriarUsuarios from "./pages/criarUsuarios.jsx";
+import LogarUsuarios from "./pages/logarUsuarios.jsx";
 
 function App(){
 
   // Estado para o formulário
-  const [form, setForm] = useState({
+  const [formCadastro, setForm] = useState({
     id: "",
     nome: "",
     funcao: "",
@@ -20,11 +21,19 @@ function App(){
     senha: "",
   });
 
+  const [formLogin, setFormLogin] = useState({
+    email: "",
+    senha: "",
+  });
+
   return (
     <Router>
       <Routes>
         {/* Rota para criar usuários */}
-        <Route path="/" element={<CriarUsuarios formData={form} setFormData={setForm}/>} />
+        <Route path="/" element={<CriarUsuarios formData={formCadastro} setFormData={setForm}/>} />
+
+        {/* Rota para criar usuários */}
+        <Route path="/login" element={<LogarUsuarios formData={formLogin} setFormData={setFormLogin}/>}/>
       </Routes>
     </Router>
   );
