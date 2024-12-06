@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
+import ProtectedRoutes from './routes/ProtectedRoutes.jsx';
 
 // Importar componentes
 import CriarUsuarios from "./pages/criarUsuarios.jsx";
 import LogarUsuarios from "./pages/logarUsuarios.jsx";
 
-function App(){
-
-  // Estado para o formulário
+function App() {
+  // Estado para o formulário de cadastro
   const [formCadastro, setForm] = useState({
     id: "",
     nome: "",
@@ -21,6 +21,7 @@ function App(){
     senha: "",
   });
 
+  // Estado para o formulário de login
   const [formLogin, setFormLogin] = useState({
     email: "",
     senha: "",
@@ -29,11 +30,21 @@ function App(){
   return (
     <Router>
       <Routes>
-        {/* Rota para criar usuários */}
-        <Route path="/" element={<CriarUsuarios formData={formCadastro} setFormData={setForm}/>} />
+        {/* Rota protegida para cadastro de usuários, acessível apenas por ADMIN */}
+        <Route
+          path="/cadastro"
+          element={
+            <ProtectedRoutes allowedRoles={["ADMIN"]}>
+              <CriarUsuarios formData={formCadastro} setFormData={setForm} />
+            </ProtectedRoutes>
+          }
+        />
 
-        {/* Rota para criar usuários */}
-        <Route path="/login" element={<LogarUsuarios formData={formLogin} setFormData={setFormLogin}/>}/>
+        {/* Rota de login */}
+        <Route
+          path="/login"
+          element={<LogarUsuarios formData={formLogin} setFormData={setFormLogin} />}
+        />
       </Routes>
     </Router>
   );

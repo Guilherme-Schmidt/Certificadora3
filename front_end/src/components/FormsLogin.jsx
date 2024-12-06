@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios'
+import axios from 'axios';
 import styles from './FormsUser.module.css';
 
 function FormsLogin({ formData, setFormData }) {
     const [message, setMessage] = useState('');
-
+    const [token, setToken] = useState('');
+    
     const api = axios.create({
         baseURL: '/usuarios', // Usa o proxy configurado no package.json
     });
@@ -15,26 +16,26 @@ function FormsLogin({ formData, setFormData }) {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Evita o envio do formulário padrão
+        e.preventDefault();
         
         try {
-            const response = await api.post('/auth/register',formData)
+            const response = await api.post('/auth/login', formData); // Mudança para /auth/login
 
-            // Checando se a resposta foi bem-sucedida
-            if (response.ok) {
-                const data = await response.json();
+            if (response.status === 200) {
+                // Supondo que o token venha no corpo da resposta
+                const { token } = response.data; // Ajuste conforme a resposta da API
+
+                // Salvar o token no localStorage
+                localStorage.setItem('token', response.data.token);
+                setToken(token);
+
                 setMessage('Usuário logado com sucesso!');
-                setFormData({
-                    email: '',
-                    senha: '',
-                });
+                setFormData({ email: '', senha: '' });
+                
             } else {
-                // Caso a resposta não seja ok, extraímos a mensagem de erro
-                const errorData = await response.json();
-                setMessage(errorData.message || 'Erro no login. Verifique os dados!');
+                setMessage('Erro no login. Verifique os dados!');
             }
         } catch (error) {
-            // Em caso de erro na requisição ou rede, exibimos a mensagem de erro
             console.error('Erro ao fazer a requisição:', error);
             setMessage(`Erro: ${error.stack || error.message}`);
         }
@@ -42,7 +43,8 @@ function FormsLogin({ formData, setFormData }) {
     
     return (
         <div className={styles.formContainer}>
-            <h2>Cadastro de Usuários</h2>
+            <h2>Login de Usuário</h2>
+            {token && <p>Token JWT: {token}</p>}  {/* Exibe o token JWT */}
             {message && <p>{message}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="inputGroup">

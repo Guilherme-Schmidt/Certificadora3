@@ -48,6 +48,17 @@ function FormsUser({ formData, setFormData }) {
             // Checando se a resposta foi bem-sucedida
             if (response.status === 200) {
                 setMessage('Usuário cadastrado com sucesso!');
+                setFormData({
+                    id: "",
+                    nome: "",
+                    funcao: "",
+                    setor: "",
+                    dataEntrada: "",
+                    dataSaida: "",
+                    permissao: "",
+                    email: "",
+                    senha: "",
+                  });
                 // Se necessário, trate a resposta com sucesso aqui
             } else {
                 // Caso a resposta não seja ok, extraímos a mensagem de erro
