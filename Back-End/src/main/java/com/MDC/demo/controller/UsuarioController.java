@@ -37,6 +37,37 @@ public class UsuarioController {
     @Autowired
     private TokenService tokenService;
 
+    @GetMapping("/auth/validate-admin")
+    public ResponseEntity<String> validateAdmin(@RequestHeader("Authorization") String authorizationHeader) {
+        try {
+            // Extrair o token do cabeçalho
+            String token = authorizationHeader.replace("Bearer ", "").trim();
+            String email = tokenService.validateToken(token);
+
+            if (email == null || email.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido ou expirado.");
+            }
+
+            // Recuperar o usuário associado ao email
+            Usuarios usuario = usuarioRespository.findByEmail(email);
+            if (usuario == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
+            }
+
+            // Verificar se o usuário tem permissão de administrador
+            if (usuario.getPermissao().toString().equals("ADMIN")) {
+                System.out.println("Usuario é admin");
+                return ResponseEntity.ok("Usuário é administrador.");
+            } else {
+                System.out.println("Usuario não é admin");
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não possui permissão de administrador.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao validar o token.");
+        }
+    }
+
+
     @PostMapping("/auth/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDto data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.senha());
