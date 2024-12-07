@@ -6,9 +6,13 @@ import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 // Importar componentes
 import CriarUsuarios from "./pages/criarUsuarios.jsx";
 import CriarAtividades from "./pages/criarAtividades.jsx";
+import ListarAtividades from "./pages/listarAtividades.jsx";
 import LogarUsuarios from "./pages/logarUsuarios.jsx";
 import ListarUsuarios from "./pages/listarUsuarios.jsx";
+
 import AcessoNegado from "./pages/acessoNegado.jsx";
+
+
 
 function App() {
   // Estado para o formulário de cadastro
@@ -59,6 +63,15 @@ function App() {
           element={
             <ProtectedRoutes allowedRoles={["ADMIN"]}>
               <CriarAtividades formData={formAtividade} setFormData={setFormsAtividade}/>
+            </ProtectedRoutes>
+          }
+        />
+
+        <Route
+          path="/atividades/lista"
+          element={
+            <ProtectedRoutes allowedRoles={["ADMIN"]}>
+              <ListarAtividades formData={formAtividade} setFormData={setFormsAtividade}/>
             </ProtectedRoutes>
           }
         />

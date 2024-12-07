@@ -8,14 +8,7 @@ function FormsCadastroAtividade({ formData, setFormData }) {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        if (name === "horas" && value) {
-            // Converte HH:mm para ISO-8601 Duration
-            const [hours, minutes] = value.split(":").map(Number);
-            const duration = `PT${hours}H${minutes}M`;
-            setFormData({ ...formData, horas: duration });
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
+       setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = async (e) => {

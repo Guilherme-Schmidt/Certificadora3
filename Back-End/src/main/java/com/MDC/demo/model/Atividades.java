@@ -3,7 +3,6 @@ package com.MDC.demo.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
@@ -21,8 +20,8 @@ public class Atividades {
     @Column(name="Descricao")
     private String descricao;
 
-    @Column(name="Horas",nullable = false)
-    private Duration horas;
+    @Column(name = "Horas", nullable = false)
+    private String horas;
 
     @Column(name="Data",nullable = false)
     private LocalDate data;

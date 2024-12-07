@@ -32,11 +32,10 @@ function Header() {
       <div className={styles.containerOpcoes}>
         <nav>
           <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/atividades">Atividades</Link></li>
-            {/* Renderiza as opções de cadastro e usuários somente se o usuário for ADMIN */}
-            {isAdmin && <li><Link to="/cadastro">Cadastro</Link></li>}
-            {isAdmin && <li><Link to="/usuarios">Usuários</Link></li>}
+            <li><Link to="/cadastro">Usuarios Cadastro</Link></li>
+            <li><Link to="/lista">Usuarios Lista</Link></li>
+            <li><Link to="/atividades">Atividades Cadastro</Link></li>
+            <li><Link to="/atividades/lista">Atividades Lista</Link></li>
           </ul>
         </nav>
         <a href="/login">
