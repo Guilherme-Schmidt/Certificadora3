@@ -21,6 +21,8 @@ public class AtividadeController {
     @PostMapping
     public ResponseEntity<Atividades> createAtividade(@RequestBody Atividades atividade) {
         Atividades savedAtividade = atividadeService.saveAtividade(atividade);
+
+        System.out.println(savedAtividade);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAtividade);
     }
 
