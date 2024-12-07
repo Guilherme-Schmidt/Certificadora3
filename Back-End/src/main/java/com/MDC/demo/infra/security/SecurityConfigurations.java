@@ -38,6 +38,7 @@ public class SecurityConfigurations implements WebMvcConfigurer {
                         .requestMatchers(HttpMethod.GET, "/atividades").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/atividades/{id}").hasAnyRole("ADMIN", "VOLUNTARIO")
                         .requestMatchers(HttpMethod.DELETE, "/atividades").hasAnyRole("ADMIN", "VOLUNTARIO")
+                        .requestMatchers(HttpMethod.GET, "/usuarios/lista").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

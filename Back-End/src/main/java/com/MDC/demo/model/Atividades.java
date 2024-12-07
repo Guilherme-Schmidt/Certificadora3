@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.Interval;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
