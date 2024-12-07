@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Corrigi o import de jwtDecode
 import axios from "axios";
 
 // Função para validar se o usuário é admin
@@ -23,24 +23,21 @@ function ProtectedRoutes({ children, allowedRoles }) {
   const token = localStorage.getItem("token");
 
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true); // Inicializa o loading como true
+  const [loading, setLoading] = useState(true);
 
-  // Validação e alteração do estado antes da renderização
-  const checkAdminStatus = async () => {
-    if (allowedRoles && allowedRoles.includes("ADMIN")) {
-      const isAdminValid = await validateAdmin();
-      setIsAdmin(isAdminValid);
-    } else {
-      setIsAdmin(false);
-    }
-    setLoading(false);
-  };
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (allowedRoles && allowedRoles.includes("ADMIN")) {
+        const isAdminValid = await validateAdmin();
+        setIsAdmin(isAdminValid);
+      } else {
+        setIsAdmin(true); // Permite acesso para roles diferentes de ADMIN
+      }
+      setLoading(false);
+    };
 
-  // Chama a validação assim que o componente for renderizado
-  if (loading) {
     checkAdminStatus();
-    return <div>Carregando...</div>; // Exibe mensagem de loading
-  }
+  }, [allowedRoles]);
 
   if (!token) {
     return <Navigate to="/login" />;
@@ -49,11 +46,23 @@ function ProtectedRoutes({ children, allowedRoles }) {
   try {
     const decoded = jwtDecode(token);
 
-    // Verifica se o usuário é admin, se necessário
-    if (!isAdmin) {
-      return <Navigate to="/cadastro" />;
+    // Verifica a expiração do token
+    const isExpired = decoded.exp * 1000 < Date.now();
+    if (isExpired) {
+      localStorage.removeItem("token");
+      return <Navigate to="/login" />;
     }
-    return children; // Retorna os filhos caso o usuário seja admin
+
+    if (loading) {
+      return <div>Carregando...</div>;
+    }
+
+    // Verifica se o usuário é admin quando necessário
+    if (allowedRoles && allowedRoles.includes("ADMIN") && !isAdmin) {
+      return <Navigate to="/unauthorized" />;
+    }
+
+    return children; // Permite acesso se todas as validações passarem
   } catch (error) {
     console.error("Token inválido ou erro ao decodificar:", error);
     localStorage.removeItem("token");

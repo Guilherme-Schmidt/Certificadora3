@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import ProtectedRoutes from './routes/ProtectedRoutes.jsx';
+import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
 
 // Importar componentes
 import CriarUsuarios from "./pages/criarUsuarios.jsx";
+import CriarAtividades from "./pages/criarAtividades.jsx";
 import LogarUsuarios from "./pages/logarUsuarios.jsx";
+import ListarUsuarios from "./pages/listarUsuarios.jsx";
+import AcessoNegado from "./pages/acessoNegado.jsx";
 
 function App() {
   // Estado para o formulário de cadastro
-  const [formCadastro, setForm] = useState({
+  const [formCadastro, setFormCadastro] = useState({
     id: "",
     nome: "",
     funcao: "",
@@ -19,6 +22,16 @@ function App() {
     permissao: "",
     email: "",
     senha: "",
+  });
+
+  const [formAtividade, setFormsAtividade] = useState({
+    id: "",
+    nome: "",
+    descricao: "",
+    horas: "",
+    data: "",
+    usuario: "",
+    grupo: "",
   });
 
   // Estado para o formulário de login
@@ -35,8 +48,33 @@ function App() {
           path="/cadastro"
           element={
             <ProtectedRoutes allowedRoles={["ADMIN"]}>
-              <CriarUsuarios formData={formCadastro} setFormData={setForm} />
+              <CriarUsuarios formData={formCadastro} setFormData={setFormCadastro} />
             </ProtectedRoutes>
+          }
+        />
+
+        {/* Rota protegida para cadastro de usuários, acessível apenas por ADMIN */}
+        <Route
+          path="/atividades"
+          element={
+            <ProtectedRoutes allowedRoles={["ADMIN"]}>
+              <CriarAtividades formData={formAtividade} setFormData={setFormsAtividade}/>
+            </ProtectedRoutes>
+          }
+        />
+
+      <Route
+          path="/lista"
+          element={
+            <ProtectedRoutes allowedRoles={["ADMIN","VOLUNTARIO"]}>
+              <ListarUsuarios/>
+            </ProtectedRoutes>
+          }
+        />
+      <Route
+          path="/unauthorized"
+          element={
+            <AcessoNegado/>
           }
         />
 

@@ -97,7 +97,7 @@ public class UsuarioController {
 
 
     //Rota para ver todos os usuarios
-    @GetMapping
+    @GetMapping("/lista")
     public ResponseEntity<List<Usuarios>> getAllUsuario(){
         List<Usuarios> usuarios = usuarioService.getAllUsuario();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
