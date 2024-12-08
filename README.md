@@ -24,6 +24,7 @@ Desenvolver um sistema para gerenciar voluntários e apoiadores do projeto de ex
   - Visualização das atividades cadastradas *(funcionalidade ainda em desenvolvimento)*.
 
 ## ROTEIRO
+## [VIDEO AUXILIAR DE INSTALAÇÃO](https://youtu.be/PyvDRSf8d2o)
 ## Banco de Dados
 
 ### Passo 1: Download do PostgreSQL
