@@ -1,9 +1,9 @@
 # Certificadora3
 # Meninas Digitais no Controle (MDC) 
 ## Integrantes 
+[George Silva Oliveira](https://github.com/georgeutfpr)<br>
 [Guilherme Augusto Silva de Melo](https://github.com/Guilherme-Silva-Melo)<br>
 [Guilherme Schmidht Lingnau](https://github.com/Guilherme-Schmidt)<br>
-George Silva Oliveira
 ## Objetivos do Sistema
 Desenvolver um sistema para gerenciar voluntários e apoiadores do projeto de extensão Meninas Digitais da UTFPR-CP
 ## Funcionalidades Desenvolvidas
