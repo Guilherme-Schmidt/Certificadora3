@@ -1,6 +1,5 @@
 package com.MDC.demo.infra.security;
 
-import com.MDC.demo.model.AuthenticationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,9 +33,10 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.PUT, "/usuarios/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/usuarios/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/atividades").hasAnyRole("ADMIN", "VOLUNTARIO")
-                        .requestMatchers(HttpMethod.GET, "/atividades").hasAnyRole("ADMIN", "VOLUNTARIO","APOIADOR")
-                        .requestMatchers(HttpMethod.PUT, "/atividades/{id}").hasAnyRole("ADMIN", "VOLUNTARIO")
-                        .requestMatchers(HttpMethod.DELETE, "/atividades").hasAnyRole("ADMIN", "VOLUNTARIO")
+                        .requestMatchers(HttpMethod.GET, "/atividades/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/atividades/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/atividades/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/atividades/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
