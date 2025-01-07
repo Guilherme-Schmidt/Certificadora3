@@ -7,8 +7,7 @@ function FormsCadastroAtividade({ formData, setFormData }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-       setFormData({ ...formData, [name]: value });
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
@@ -16,7 +15,9 @@ function FormsCadastroAtividade({ formData, setFormData }) {
         const token = localStorage.getItem("token"); // Recupera o token do localStorage
 
         const dataToSend = { ...formData };
-        delete dataToSend.id; // Remove ID, se necessário
+        
+        // Certifique-se de que o valor de 'usuario' seja um ID numérico
+        dataToSend.usuario = parseInt(formData.usuario, 10); // Converte para número
 
         console.log("Dados enviados:", dataToSend);
 
@@ -65,7 +66,7 @@ function FormsCadastroAtividade({ formData, setFormData }) {
                 </div>
 
                 <div className="inputGroup">
-                    <label htmlFor="Descricao">Descricao:</label>
+                    <label htmlFor="descricao">Descrição:</label>
                     <input
                         type="text"
                         id="descricao"
@@ -100,7 +101,7 @@ function FormsCadastroAtividade({ formData, setFormData }) {
                 </div>
 
                 <div className="inputGroup">
-                    <label htmlFor="usuario">Usuario:</label>
+                    <label htmlFor="usuario">Usuário (ID):</label>
                     <input
                         type="number"
                         id="usuario"
