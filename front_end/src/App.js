@@ -96,6 +96,10 @@ function App() {
           path="/login"
           element={<LogarUsuarios formData={formLogin} setFormData={setFormLogin} />}
         />
+        <Route
+          path="/"
+          element={<LogarUsuarios formData={formLogin} setFormData={setFormLogin} />}
+        />
       </Routes>
     </Router>
   );

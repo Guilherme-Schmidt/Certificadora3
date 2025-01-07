@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import Button from '@mui/material/Button'; // Importação do botão
 import axios from "axios";
 import styles from './TabelaUsuarios.module.css'; // Importando o CSS
+import Icons from './icons/Icons';
 
 function TabelaUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
@@ -25,6 +27,28 @@ function TabelaUsuarios() {
     }
   };
 
+  const deleteUsuario = async (usuarioId) => {
+    try {
+      const token = localStorage.getItem("token"); // Recupera o token do armazenamento local
+  
+      // Envia a requisição de deleção para o backend
+      await axios.delete(`http://localhost:8080/usuarios/${usuarioId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
+        },
+      });
+  
+      // Após excluir o usuário, atualiza a lista de usuários
+      setUsuarios((prevUsuarios) =>
+        prevUsuarios.filter((usuario) => usuario.id !== usuarioId)
+      );
+    } catch (err) {
+      setError("Erro ao excluir usuário: " + err.stack);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Chama a função de busca imediatamente
   if (loading) {
     fetchUsuarios();
@@ -41,6 +65,8 @@ function TabelaUsuarios() {
       <table className={styles.table}>
         <thead>
           <tr>
+            <th>Ação</th>
+            <th>ID</th>
             <th>Nome</th>
             <th>Função</th>
             <th>Setor</th>
@@ -53,6 +79,11 @@ function TabelaUsuarios() {
         <tbody>
           {usuarios.map((usuario, index) => (
             <tr key={index}>
+              <td className={styles.buttonContainer}>
+                <Button startIcon={<Icons.DELETE />} onClick={() => deleteUsuario(usuario.id)} size="small"></Button>
+                <Button startIcon={<Icons.EDIT />}></Button>
+              </td>
+              <td>{usuario.id}</td>
               <td>{usuario.nome}</td>
               <td>{usuario.funcao}</td>
               <td>{usuario.setor}</td>

@@ -34,3 +34,10 @@
     background-color: #f9f9f9;
   }
   
+  .buttonContainer {
+    display: flex !important;     
+    height: 1rem;          /* Garante que o flexbox seja aplicado */
+    gap: 8px !important;                    /* Espaço entre os botões */
+    justify-content: center !important;     /* Centraliza os botões */
+    align-items: center !important;         /* Alinha os itens verticalmente */
+  }
