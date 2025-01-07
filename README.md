@@ -86,9 +86,11 @@ Para garantir o acesso completo ao sistema, é necessário criar um usuário adm
 
    ```sql
    INSERT INTO Usuarios (Nome, Funcao, Setor, Data_Entrada, Permissao, Email, Senha)
-   VALUES ('Administrador', 'Admin', 'TI', '2024-12-07', 'ADMIN', 'admin@admin.com', '123456');
-
+   VALUES ('Administrador', 'Admin', 'TI', '2024-12-07', 'ADMIN', 'admin@admin.com', '$2a$12$XGAUObOAViLIJ1cD2FUTJedKYMlJ7H7AFimfuKFlzXu7BYyJ9eaP6');
+   ```
 Com isso, o banco de dados `mdc` estará pronto para ser utilizado.
+EMAIL: admin@admin.com
+senha: 123456
 
 ## BACK-END
 ## Configuração de Acesso ao Banco de Dados
