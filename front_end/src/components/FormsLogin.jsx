@@ -7,9 +7,8 @@ function FormsLogin({ formData, setFormData }) {
     const [token, setToken] = useState('');
     
     const api = axios.create({
-        baseURL: '/usuarios', // Usa o proxy configurado no package.json
+        baseURL: 'http://localhost:8080/usuarios',
     });
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -19,7 +18,7 @@ function FormsLogin({ formData, setFormData }) {
         e.preventDefault();
         
         try {
-            const response = await api.post('/auth/login', formData); // Mudança para /auth/login
+            const response = await api.post('/auth/login', formData);
 
             if (response.status === 200) {
                 // Supondo que o token venha no corpo da resposta

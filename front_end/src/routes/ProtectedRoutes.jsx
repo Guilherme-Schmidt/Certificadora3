@@ -7,7 +7,7 @@ import axios from "axios";
 async function validateAdmin() {
   const token = localStorage.getItem("token");
   try {
-    const response = await axios.get("/usuarios/auth/validate-admin", {
+    const response = await axios.get("http://localhost:8080/usuarios/auth/validate-admin", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
