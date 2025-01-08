@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./TabelaUsuarios";
+import styles from "./TabelaUsuarios.module.css";
 
 function TabelaAtividadesUsuario() {
   const [atividades, setAtividades] = useState([]);
@@ -9,20 +9,27 @@ function TabelaAtividadesUsuario() {
 
   const fetchAtividades = async () => {
     try {
-      const token = localStorage.getItem("token"); // Recupera o token do armazenamento local
-     
-      const response = await axios.get(`http://localhost:8080/atividades/user/${usuarioId}`, {
+      const token = localStorage.getItem("token"); // Recupera o token
+      const response = await axios.get(`http://localhost:8080/atividades/user/me`, {
         headers: {
-          Authorization: `Bearer ${token}`, // Adiciona o token no cabeçalho
+          Authorization: `Bearer ${token}`,
         },
       });
-      setAtividades(response.data); // Atualiza o estado com os dados
+  
+      // Verifique se a resposta é um array
+      if (Array.isArray(response.data)) {
+        setAtividades(response.data);
+      } else {
+        setAtividades([]); 
+      }
     } catch (err) {
       setError("Erro ao carregar atividades: " + err.message);
+      setAtividades([]); // Garante que o estado seja um array
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchAtividades();

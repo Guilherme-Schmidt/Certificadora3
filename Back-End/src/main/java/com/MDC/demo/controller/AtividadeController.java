@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.MDC.demo.infra.security.TokenService;
 import com.MDC.demo.model.Atividades;
+import com.MDC.demo.model.Usuarios;
+import com.MDC.demo.repository.UsuarioRespository;
 import com.MDC.demo.service.AtividadeService;
 
 @RestController
@@ -24,6 +28,12 @@ import com.MDC.demo.service.AtividadeService;
 public class AtividadeController {
     @Autowired
     private AtividadeService atividadeService;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private UsuarioRespository usuarioRespository;
 
     @PostMapping
     public ResponseEntity<Atividades> createAtividade(@RequestBody Atividades atividade) {
@@ -56,6 +66,36 @@ public class AtividadeController {
             }
         return new ResponseEntity<>(atividades, HttpStatus.OK);
     }
+
+    @GetMapping("/user/me")
+    public ResponseEntity<List<Atividades>> getAtividadesDoUsuarioLogado(@RequestHeader("Authorization") String authorizationHeader) {
+        try {
+            // Extrair o token do cabeçalho
+            String token = authorizationHeader.replace("Bearer ", "").trim();
+            String email = tokenService.validateToken(token);
+
+            if (email == null || email.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+
+            // Recuperar o usuário logado pelo email
+            Usuarios usuario = usuarioRespository.findByEmail(email);
+            if (usuario == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            // Buscar atividades pelo ID do usuário
+            List<Atividades> atividades = atividadeService.getAtividadesByUserId(usuario.getId());
+            if (atividades.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            }
+
+            return ResponseEntity.ok(atividades);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
     // Atualizar uma atividade por id
     @PutMapping("/{id}")
