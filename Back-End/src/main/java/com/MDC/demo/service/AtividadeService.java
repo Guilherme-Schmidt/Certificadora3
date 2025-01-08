@@ -1,13 +1,14 @@
 package com.MDC.demo.service;
 
-import com.MDC.demo.model.Atividades;
-import com.MDC.demo.repository.AtividadeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.MDC.demo.model.Atividades;
+import com.MDC.demo.repository.AtividadeRepository;
 
 @Service
 public class AtividadeService {
@@ -24,6 +25,11 @@ public class AtividadeService {
 
     public Optional<Atividades> getAtividadeById(Long id) {
         return atividadeRepository.findById(id);
+    }
+
+    // Buscar atividades por ID do usuário
+    public List<Atividades> getAtividadesByUserId(Long userId) {
+        return atividadeRepository.findByUsuarioId(userId);
     }
 
     public Atividades updateAtividade(Long id, Atividades atividadeAtualizada) {

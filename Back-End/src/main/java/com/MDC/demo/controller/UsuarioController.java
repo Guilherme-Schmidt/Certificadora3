@@ -4,22 +4,31 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.MDC.demo.infra.security.TokenService;
-import com.MDC.demo.model.AuthenticationDto;
-import com.MDC.demo.model.LoginResponseDTO;
-import com.MDC.demo.model.RegisterDto;
-import com.MDC.demo.repository.UsuarioRespository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.MDC.demo.infra.security.TokenService;
+import com.MDC.demo.model.AuthenticationDto;
+import com.MDC.demo.model.LoginResponseDTO;
+import com.MDC.demo.model.RegisterDto;
 import com.MDC.demo.model.Usuarios;
+import com.MDC.demo.repository.UsuarioRespository;
 import com.MDC.demo.service.UsuarioService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -69,12 +78,15 @@ public class UsuarioController {
 
 
     @PostMapping("/auth/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDto data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.senha());
+        public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDto data) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((Usuarios) auth.getPrincipal());
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        Usuarios usuario = (Usuarios) auth.getPrincipal();
+        String token = tokenService.generateToken(usuario);
+
+        // Retorna o token e o nome do usuário
+        return ResponseEntity.ok(new LoginResponseDTO(token, usuario.getNome()));
     }
 
     @PostMapping("/auth/register")

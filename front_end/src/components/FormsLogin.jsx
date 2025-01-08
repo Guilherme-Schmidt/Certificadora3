@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './FormsUser.module.css';
+import { useNavigate } from 'react-router-dom';
 
 function FormsLogin({ formData, setFormData }) {
     const [message, setMessage] = useState('');
     const [token, setToken] = useState('');
-    
+    const [modalVisible, setModalVisible] = useState(false);
+    const [userName, setUserName] = useState('');
+    const navigate = useNavigate(); // Hook para navegação
+
     const api = axios.create({
         baseURL: 'http://localhost:8080/usuarios',
     });
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -16,21 +21,20 @@ function FormsLogin({ formData, setFormData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const response = await api.post('/auth/login', formData);
 
             if (response.status === 200) {
-                // Supondo que o token venha no corpo da resposta
-                const { token } = response.data; // Ajuste conforme a resposta da API
-
-                // Salvar o token no localStorage
-                localStorage.setItem('token', response.data.token);
+                const { token, nome } = response.data; 
+                localStorage.setItem('token', token);
                 setToken(token);
-
+                setUserName(nome);
                 setMessage('Usuário logado com sucesso!');
                 setFormData({ email: '', senha: '' });
-                
+
+                // Exibir o modal de boas-vindas
+                setModalVisible(true);
             } else {
                 setMessage('Erro no login. Verifique os dados!');
             }
@@ -39,11 +43,15 @@ function FormsLogin({ formData, setFormData }) {
             setMessage(`Erro: ${error.stack || error.message}`);
         }
     };
-    
+
+    const closeModal = () => {
+        setModalVisible(false);
+        navigate('/lista'); // Redireciona para a página desejada
+    };
+
     return (
         <div className={styles.formContainer}>
             <h2>Login de Usuário</h2>
-            {token && <p>Token JWT: {token}</p>}  {/* Exibe o token JWT */}
             {message && <p>{message}</p>}
             <form onSubmit={handleSubmit}>
                 <div className="inputGroup">
@@ -72,6 +80,16 @@ function FormsLogin({ formData, setFormData }) {
 
                 <button type="submit">Entrar</button>
             </form>
+
+            {modalVisible && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modal}>
+                        <h3>Bem-vindo, {userName}!</h3>
+                        <p>Você realizou o login com sucesso.</p>
+                        <button onClick={closeModal}>Fechar</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,16 +1,23 @@
 package com.MDC.demo.controller;
 
- 
-import com.MDC.demo.model.Atividades;
-import com.MDC.demo.service.AtividadeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.MDC.demo.model.Atividades;
+import com.MDC.demo.service.AtividadeService;
 
 @RestController
 @RequestMapping("/atividades")
@@ -39,6 +46,15 @@ public class AtividadeController {
         Optional<Atividades> atividade = atividadeService.getAtividadeById(id);
         return atividade.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Atividades>> getAtividadesByUserId(@PathVariable Long userId) {
+        List<Atividades> atividades = atividadeService.getAtividadesByUserId(userId);
+            if (atividades.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        return new ResponseEntity<>(atividades, HttpStatus.OK);
     }
 
     // Atualizar uma atividade por id
