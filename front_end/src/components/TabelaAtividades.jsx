@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from './TabelaUsuarios.module.css'; // Importando o CSS
 
@@ -7,7 +7,7 @@ function TabelaAtividades() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Carregar os usuários antes da renderização
+  // Função para buscar as atividades
   const fetchAtividades = async () => {
     try {
         const token = localStorage.getItem("token"); // Recupera o token do armazenamento local
@@ -19,15 +19,18 @@ function TabelaAtividades() {
         });
         setAtividades(response.data); // Atualiza o estado com os dados
     } catch (err) {
-      setError("Erro ao carregar usuários: " + err.stack);
+      setError("Erro ao carregar atividades: " + err.message); // Alterado para err.message
     } finally {
       setLoading(false);
     }
   };
 
-  // Chama a função de busca imediatamente
-  if (loading) {
+  // Usar useEffect para carregar as atividades uma vez quando o componente for montado
+  useEffect(() => {
     fetchAtividades();
+  }, []); // O array vazio garante que a função execute apenas uma vez, após a montagem
+
+  if (loading) {
     return <p>Carregando...</p>;
   }
 
@@ -42,7 +45,6 @@ function TabelaAtividades() {
         <thead>
           <tr>
             <th>Nome</th>
-            <th>Função</th>
             <th>Descrição</th>
             <th>Horas</th>
             <th>Data de Saída</th>
@@ -53,12 +55,11 @@ function TabelaAtividades() {
         <tbody>
           {atividades.map((atividade, index) => (
             <tr key={index}>
-              <td>{atividade.id}</td>
-              <td>{atividade.nome}</td>
+              <td>{atividade.nome}</td> {/* Corrigido para acessar o nome da atividade */}
               <td>{atividade.descricao}</td>
               <td>{atividade.horas}</td>
               <td>{atividade.data}</td>
-              <td>{atividade.usuario}</td>
+              <td>{atividade.usuario ? atividade.usuario.nome : "N/A"}</td> {/* Acessando o nome do usuário */}
               <td>{atividade.grupo}</td>
             </tr>
           ))}

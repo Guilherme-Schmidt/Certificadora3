@@ -90,7 +90,7 @@ function FormsUser({ formData, setFormData }) {
                 </div>
 
                 <div className="inputGroup">
-                    <label htmlFor="permissao">Tipo:</label>
+                    <label htmlFor="permissao">Permissão:</label>
                     <input
                         type="text"
                         id="permissao"

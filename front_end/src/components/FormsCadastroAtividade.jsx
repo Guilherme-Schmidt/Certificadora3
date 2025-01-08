@@ -1,9 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './FormsUser.module.css';
 
 function FormsCadastroAtividade({ formData, setFormData }) {
     const [message, setMessage] = useState('');
+    const [usuarios, setUsuarios] = useState([]); // Novo estado para armazenar os usuários
+
+    useEffect(() => {
+        const fetchUsuarios = async () => {
+            const token = localStorage.getItem("token"); // Recupera o token do localStorage
+
+            if (!token) {
+                setMessage('Token de autenticação não encontrado. Faça login novamente.');
+                return;
+            }
+
+            try {
+                const response = await axios.get('http://localhost:8080/usuarios/lista', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUsuarios(response.data); // Armazena a lista de usuários
+            } catch (error) {
+                console.error('Erro ao buscar usuários:', error);
+                if (error.response) {
+                    // Mensagem personalizada baseada no código de erro
+                    if (error.response.status === 403) {
+                        setMessage('Acesso negado. Seu token pode ser inválido ou expirado.');
+                    } else if (error.response.status === 401) {
+                        setMessage('Não autorizado. Verifique suas credenciais.');
+                    } else {
+                        setMessage(`Erro ao carregar usuários: ${error.response.data.message || 'Erro desconhecido'}`);
+                    }
+                } else {
+                    setMessage('Erro ao conectar ao servidor. Verifique sua conexão.');
+                }
+            }
+        };
+
+        fetchUsuarios();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -12,12 +49,15 @@ function FormsCadastroAtividade({ formData, setFormData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem("token"); // Recupera o token do localStorage
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            setMessage('Token de autenticação não encontrado. Faça login novamente.');
+            return;
+        }
 
         const dataToSend = { ...formData };
-        
-        // Certifique-se de que o valor de 'usuario' seja um ID numérico
-        dataToSend.usuario = parseInt(formData.usuario, 10); // Converte para número
+        dataToSend.usuario = parseInt(formData.usuario, 10);
 
         console.log("Dados enviados:", dataToSend);
 
@@ -25,10 +65,10 @@ function FormsCadastroAtividade({ formData, setFormData }) {
             const response = await axios.post('http://localhost:8080/atividades', dataToSend, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                }
+                },
             });
 
-            if (response.status === 201) { // Status CREATED
+            if (response.status === 201) {
                 setMessage('Atividade cadastrada com sucesso!');
                 setFormData({
                     id: "",
@@ -101,15 +141,21 @@ function FormsCadastroAtividade({ formData, setFormData }) {
                 </div>
 
                 <div className="inputGroup">
-                    <label htmlFor="usuario">Usuário (ID):</label>
-                    <input
-                        type="number"
+                    <label htmlFor="usuario">Usuário:</label>
+                    <select
                         id="usuario"
                         name="usuario"
                         value={formData.usuario}
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        <option value="">Selecione um usuário</option>
+                        {usuarios.map((usuario) => (
+                            <option key={usuario.id} value={usuario.id}>
+                                {usuario.nome} (ID: {usuario.id})
+                            </option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="inputGroup">
