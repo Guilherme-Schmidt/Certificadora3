@@ -91,14 +91,18 @@ function FormsUser({ formData, setFormData }) {
 
                 <div className="inputGroup">
                     <label htmlFor="permissao">Permissão:</label>
-                    <input
-                        type="text"
+                    <select
                         id="permissao"
                         name="permissao"
                         value={formData.permissao}
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        <option value="">Selecione uma permissão</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="VOLUNTARIO">VOLUNTÁRIO</option>
+                        <option value="APOIADOR">APOIADOR</option>
+                    </select>
                 </div>
 
                 <div className="inputGroup">

@@ -92,3 +92,37 @@ button:hover {
 .modal button:hover {
     background-color: #45a049;
 }
+
+.inputGroup div {
+    display: flex;
+    align-items: center;
+    gap: 4px; /* Espaço reduzido entre o checkbox e o label */
+    font-size: 0.75rem; /* Fonte menor */
+    margin-bottom: 0.3rem; /* Espaçamento reduzido entre os itens */
+}
+
+/* Estilizando os checkboxes */
+.inputGroup input[type="checkbox"] {
+    width: 12px; /* Tamanho reduzido do checkbox */
+    height: 12px;
+    cursor: pointer;
+    accent-color: #9b4d96; /* Cor personalizada */
+    border: 1px solid #666; /* Borda fina */
+    appearance: none; /* Remove o estilo padrão */
+    border-radius: 3px; /* Bordas arredondadas */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Estilizando o estado marcado do checkbox */
+.inputGroup input[type="checkbox"]:checked {
+    background-color: #9b4d96; /* Cor de fundo quando marcado */
+    border-color: #9b4d96; /* Cor da borda quando marcado */
+}
+
+/* Estilizando o label */
+.inputGroup label {
+    font-size: 0.75rem; /* Fonte menor */
+    color: #333;
+    cursor: pointer;
+}
