@@ -1,0 +1,73 @@
+.container {
+  margin: 20px;
+  padding: 20px;
+  background-color: #f3e1f4;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.titulo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #69237C;
+  text-align: center;
+}
+
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.form {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.changePassword {
+  width: 100%;
+  background-color: #69237C !important;
+  color: white !important;
+}
+
+.saveButton {
+  width: 100%;
+  background-color: #4CAF50 !important;
+  color: white !important;
+}
+
+.saveButton:hover {
+  background-color: #45a049 !important;
+}
+
+.textField {
+  background-color: white;
+  border-radius: 5px;
+}
+
+.disabledField {
+  background-color: #f2f2f2;
+  color: #777;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}

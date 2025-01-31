@@ -46,7 +46,7 @@ function FormsLogin({ formData, setFormData }) {
 
     const closeModal = () => {
         setModalVisible(false);
-        navigate('/lista'); // Redireciona para a página desejada
+        navigate('/auth/me'); // Redireciona para a página desejada
     };
 
     return (

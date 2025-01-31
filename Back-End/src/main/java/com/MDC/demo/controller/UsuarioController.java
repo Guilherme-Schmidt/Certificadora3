@@ -142,4 +142,30 @@ public class UsuarioController {
          usuarioService.deleteUsuario(id);
          return new ResponseEntity<>(HttpStatus.NO_CONTENT);
      }
+
+     @GetMapping("/auth/me")
+     public ResponseEntity<Usuarios> getUsuarioByToken(@RequestHeader("Authorization") String authorizationHeader) {
+         try {
+             // Extrair o token do cabeçalho
+             String token = authorizationHeader.replace("Bearer ", "").trim();
+             
+             // Validar o token e extrair o e-mail
+             String email = tokenService.validateToken(token);
+             System.out.println(email);
+             if (email == null || email.isEmpty()) {
+                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+             }
+     
+             // Recuperar o usuário associado ao e-mail
+             Usuarios usuario = usuarioRespository.findByEmail(email);
+             if (usuario == null) {
+                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+             }
+     
+             return ResponseEntity.ok(usuario);
+         } catch (Exception e) {
+            System.out.println(e);
+             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+         }
+     }
 }

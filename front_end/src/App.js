@@ -11,6 +11,7 @@ import LogarUsuarios from "./pages/logarUsuarios.jsx";
 import ListarUsuarios from "./pages/listarUsuarios.jsx";
 import ListarAtividadeUsuario from "./pages/listarAtividadeUsuario.jsx"
 import AcessoNegado from "./pages/acessoNegado.jsx";
+import PaginaUsuario from "./pages/paginaUsuario.jsx";
 
 
 function App() {
@@ -79,9 +80,9 @@ function App() {
         <Route
           path="/atividades/user/:userId"
           element={
-            <ProtectedRoutes allowedRoles={["VOLUNTARIO", "ADMIN", "APOIADOR"]}> {/* Defina as roles que têm acesso à página */}
+            
               <ListarAtividadeUsuario />
-            </ProtectedRoutes>
+            
           }
         />
 
@@ -109,6 +110,7 @@ function App() {
           path="/"
           element={<LogarUsuarios formData={formLogin} setFormData={setFormLogin} />}
         />
+        <Route path="/auth/me" element={<PaginaUsuario />} />
       </Routes>
     </Router>
   );

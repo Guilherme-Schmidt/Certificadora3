@@ -1,32 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import {jwtDecode} from 'jwt-decode'; // Corrigido o nome da importação de jwtDecode para jwtDecode
 import { Link } from 'react-router-dom';
 import styles from './Header.module.css'; // Importando o CSS
 import logo from '../images/logo.jpg'; // Importando a logo
+import Icons from './icons/Icons';
+import axios from "axios";
 
-function Header() {
+async function validateAdmin() {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get("http://localhost:8080/usuarios/auth/validate-admin", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return true;
+  } catch (error) {
+    console.error("Erro ao validar admin:", error.response?.data || error.message);
+    return false;
+  }
+}
+
+function Header({login}){
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Verificar se o token está presente no armazenamento local
-    const token = localStorage.getItem('token');
-    
-    if (token) {
-      try {
-        // Decodificar o token para obter as informações
-        const decodedToken = jwtDecode(token);
-
-        // Verificar se o usuário é um admin
-        if (decodedToken.role === 'admin') {
-          setIsAdmin(true);
-        }
-      } catch (error) {
-        console.error('Erro ao decodificar o token:', error);
-      }
+    async function checkAdmin() {
+      const isAdminUser = await validateAdmin();
+      setIsAdmin(isAdminUser);
     }
+    checkAdmin();
   }, []);
 
-  return (
+  if(login){
+    return null;
+  }
+  else if (isAdmin === true){ 
+    return (
     <header className={styles.headerContainer}>
       <img src={logo} alt="Logo Meninas Digitais" className={styles.logo} />
       <div className={styles.containerOpcoes}>
@@ -36,14 +45,26 @@ function Header() {
             <li><Link to="/lista">Usuarios Lista</Link></li>
             <li><Link to="/atividades">Atividades Cadastro</Link></li>
             <li><Link to="/atividades/lista">Atividades Lista</Link></li>
+            <a href="/auth/me">
+              <Icons.AVATAR/>
+           </a>
           </ul>
         </nav>
-        <a href="/login">
-          <button>Entrar</button>
-        </a>
       </div>
     </header>
   );
+}
+  else{
+    return(
+    <header className={styles.headerContainer}>
+      <img src={logo} alt="Logo Meninas Digitais" className={styles.logo} />
+      <div className={styles.containerOpcoes}>
+        <a href="/auth/me">
+          <Icons.AVATAR/>
+        </a>
+      </div>
+    </header>)
+  }
 }
 
 export default Header;
