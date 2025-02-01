@@ -25,6 +25,7 @@ Desenvolver um sistema para gerenciar voluntários e apoiadores do projeto de ex
 
 ## ROTEIRO
 ## [VIDEO AUXILIAR DE INSTALAÇÃO](https://youtu.be/PyvDRSf8d2o)
+## [VÍDEO FINAL DE INSTALAÇÃO DAS FERRAMENTAS E EXECUÇÃO DO SISTEMA](https://youtu.be/H4l7jEifH10)
 ## Banco de Dados
 
 ### Passo 1: Download do PostgreSQL
