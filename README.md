@@ -42,23 +42,9 @@ Desenvolver um sistema para gerenciar voluntários e apoiadores do projeto de ex
 
 ## Passo 4: Criação das Tabelas
 
-Com o banco de dados `mdc` criado, o próximo passo é criar as tabelas necessárias para armazenar os dados do projeto. Abaixo estão as instruções para criar as tabelas **Atividades** e **Usuários**.
-1. **Tabela de Atividades**  
-   A tabela **Atividades** armazenará informações sobre as atividades realizadas, como nome, descrição, horas, data e o usuário responsável. Também contém uma chave estrangeira que referencia a tabela de **Usuários**.
+Com o banco de dados `mdc` criado, o próximo passo é criar as tabelas necessárias para armazenar os dados do projeto. Abaixo estão as instruções para criar as tabelas **Usuários** e **Atividades**.
 
-   ```
-   CREATE TABLE IF NOT EXISTS Atividades (
-    ID_Atividade BIGSERIAL PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    Descricao TEXT,
-    Horas VARCHAR(50) NOT NULL,
-    Data DATE NOT NULL,
-    ID_Usuario BIGINT NOT NULL,
-    Grupo VARCHAR(50) NOT NULL
-    CONSTRAINT FK_Atividades_Usuarios FOREIGN KEY (ID_Usuario) REFERENCES usuarios(ID_Usuario) ON DELETE CASCADE);
-   ```
-
-2. **Tabela de Usuários**  
+1. **Tabela de Usuários**  
    A tabela **Usuários** conterá dados sobre os usuários, como nome, função, setor, datas de entrada e saída, permissões, email e senha.
 ```
 CREATE TABLE IF NOT EXISTS Usuarios (
@@ -68,10 +54,27 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     Setor VARCHAR(50),
     Data_Entrada DATE NOT NULL,
     Data_Saida DATE,
-    Permissao INT NOT NULL,
+    Permissao VARCHAR(100)  NOT NULL,
     Email VARCHAR(100) NOT NULL UNIQUE,
-    Senha VARCHAR(100) NOT NULL);
+    Senha VARCHAR(100) NOT NULL);
 ````
+2. **Tabela de Atividades**  
+   A tabela **Atividades** armazenará informações sobre as atividades realizadas, como nome, descrição, horas, data e o usuário responsável. Também contém uma chave estrangeira que referencia a tabela de **Usuários**.
+
+ ```
+CREATE TABLE IF NOT EXISTS Atividades (
+    ID_Atividade BIGSERIAL PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    Descricao TEXT,
+    Horas VARCHAR(50) NOT NULL,
+    Data DATE NOT NULL,
+    ID_Usuario BIGINT NOT NULL,
+    Grupo VARCHAR(50) NOT NULL,
+    CONSTRAINT FK_Atividades_Usuarios FOREIGN KEY (ID_Usuario) REFERENCES usuarios(ID_Usuario) ON DELETE CASCADE
+);
+ ```
+
+
 Após executar esses comandos, as tabelas estarão prontas para armazenar os dados necessários para o gerenciamento de atividades e usuários no sistema.
 
 ### Passo 5: Criar o Usuário Administrador no Banco de Dados
