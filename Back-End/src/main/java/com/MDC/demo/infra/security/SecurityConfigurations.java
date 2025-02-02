@@ -1,6 +1,5 @@
 package com.MDC.demo.infra.security;
 
-import com.MDC.demo.model.AuthenticationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +39,7 @@ public class SecurityConfigurations implements WebMvcConfigurer {
                         .requestMatchers(HttpMethod.PUT, "/atividades/{id}").hasAnyRole("ADMIN", "VOLUNTARIO")
                         .requestMatchers(HttpMethod.DELETE, "/atividades").hasAnyRole("ADMIN", "VOLUNTARIO")
                         .requestMatchers(HttpMethod.GET, "/usuarios/lista").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

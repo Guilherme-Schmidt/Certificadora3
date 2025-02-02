@@ -39,6 +39,7 @@ public class Atividades {
     private LocalDate data;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "ID_Usuario", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Usuarios usuario;
